@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="为TA做一首专属歌 — 讲述你们的故事，AI帮你写成一首独一无二的歌。生日/表白/纪念/告别，9.9元起。">
 <meta property="og:title" content="为TA做一首专属歌 | AI定制">
 <meta property="og:description" content="口述你的故事 → AI写成歌词 → 生成歌曲 → 送给TA。比任何礼物都用心。">
@@ -27,6 +27,8 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .container { max-width: 480px; margin: 0 auto; padding: 0 24px; }
 
@@ -302,11 +304,13 @@
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
   }
 
   function closeModal() {
     document.getElementById('modal').classList.remove('active');
     document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
   }
 
   document.getElementById('modal').addEventListener('click', function(e) {
