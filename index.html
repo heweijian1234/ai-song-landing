@@ -277,22 +277,25 @@
 
     <!-- Step 2: 付款（提交后显示） -->
     <div id="modal-step2" style="display:none;">
-      <h3 style="margin-bottom:8px;">✅ 故事已复制到剪贴板</h3>
-      <p style="font-size:14px; color:var(--text2); margin-bottom:20px;">现在完成最后两步👇</p>
+      <h3 style="margin-bottom:4px;">✅ 故事已复制到剪贴板</h3>
+      <p style="font-size:13px; color:var(--text2); margin-bottom:20px;">现在扫码付款，然后打开微信粘贴发送👇</p>
 
-      <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px; background:rgba(212,168,83,0.08); border-radius:14px; padding:16px;">
-        <img src="qr-payment.jpg" alt="微信扫码支付" style="width:90px; height:90px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); object-fit:contain; flex-shrink:0;">
-        <div style="text-align:left; font-size:12px; color:var(--text2); line-height:1.9;">
-          <div>① <strong style="color:#fff;">扫码付款</strong> ¥9.9</div>
-          <div>② <strong style="color:#fff;">打开微信</strong></div>
-          <div style="margin-left:12px;">→ 搜索 <strong style="color:var(--accent2);">jewel3210</strong></div>
-          <div>③ <strong style="color:#fff;">粘贴发送</strong> 故事+截图</div>
+      <!-- QR code -- large enough for long-press recognition -->
+      <div style="margin-bottom:16px;">
+        <img src="qr-payment.jpg" alt="微信扫码支付" style="width:180px; height:180px; border-radius:14px; border:2px solid rgba(255,255,255,0.12); object-fit:contain;">
+      </div>
+
+      <div style="background:rgba(255,255,255,0.04); border-radius:14px; padding:16px; margin-bottom:14px; text-align:left;">
+        <div style="font-size:13px; color:var(--text2); line-height:2.2;">
+          <div>① <strong style="color:var(--gold);">长按上方二维码</strong> → 识别付款 ¥9.9</div>
+          <div>② <strong style="color:#fff;">打开微信</strong> → 搜索 <strong style="color:var(--accent2);">jewel3210</strong></div>
+          <div>③ <strong style="color:#fff;">粘贴</strong> 发送故事 + 付款截图</div>
         </div>
       </div>
 
       <p style="font-size:12px; color:var(--text3); margin-bottom:16px;">⏱️ 12-24小时内交付 · 不满意免费修改</p>
 
-      <button class="cta-btn" onclick="copyAndOpenWechat()" style="margin-bottom:12px; font-size:15px; padding:14px;">📋 再次复制 + 打开微信</button>
+      <button class="cta-btn" onclick="copyAndOpenWechat()" id="copy-btn" style="margin-bottom:12px; font-size:15px; padding:14px;">📋 再次复制故事内容</button>
       <button class="modal-close" onclick="closeModal()">关闭</button>
     </div>
 
@@ -364,11 +367,30 @@
     var sceneText = scene.options[scene.selectedIndex].text;
     var fullText = '【' + sceneText + '】\n' + story;
 
+    var copied = false;
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(fullText).catch(function(){});
+      navigator.clipboard.writeText(fullText).then(function() { copied = true; }).catch(function(){});
     }
-    // Try to open WeChat (works on mobile)
-    window.location.href = 'weixin://';
+    // Fallback for older browsers / WeChat webview
+    if (!copied) {
+      var tmp = document.createElement('textarea');
+      tmp.value = fullText;
+      tmp.style.position = 'fixed'; tmp.style.opacity = '0';
+      document.body.appendChild(tmp);
+      tmp.select();
+      try { document.execCommand('copy'); copied = true; } catch(e) {}
+      document.body.removeChild(tmp);
+    }
+
+    // Visual feedback on button
+    var btn = document.getElementById('copy-btn');
+    var original = btn.textContent;
+    btn.textContent = '✅ 已复制！';
+    btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+    setTimeout(function() {
+      btn.textContent = original;
+      btn.style.background = '';
+    }, 2000);
   }
 
   function closeModal() {
