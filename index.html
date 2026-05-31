@@ -247,48 +247,55 @@
 <!-- Order Modal -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
-    <h3 id="modal-title">开始创作专属歌</h3>
-    <p id="modal-desc" style="margin-bottom:24px;">讲讲你和TA的故事，我会把它写成一首独一无二的歌</p>
 
-    <!-- ① 场景选择 -->
-    <div style="text-align:left; margin-bottom:20px;">
-      <label style="font-size:12px; color:var(--text3); display:block; margin-bottom:6px;">场景</label>
-      <select id="scene-select" style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; color:#fff; font-size:14px;">
-        <option value="生日">🎂 生日祝福</option>
-        <option value="表白">💌 表白/纪念</option>
-        <option value="给孩子">👶 给孩子</option>
-        <option value="给父母">👨‍👩‍👧 给父母</option>
-        <option value="告别">🌅 告别/怀念</option>
-        <option value="自定义">✨ 其他场景</option>
-      </select>
-    </div>
+    <!-- Step 1: 写故事 -->
+    <div id="modal-step1">
+      <h3 id="modal-title">开始创作专属歌</h3>
+      <p id="modal-desc" style="margin-bottom:20px;">讲讲你和TA的故事，我来写成一首独一无二的歌</p>
 
-    <!-- ② 故事输入 — 主角 -->
-    <div style="margin-bottom:24px;">
-      <label style="font-size:12px; color:var(--text3); display:block; margin-bottom:6px;">✍️ 你们的故事</label>
-      <textarea id="story-input" placeholder="TA叫什么？你们怎么认识的？&#10;有没有特别难忘的回忆？&#10;你想通过这首歌对TA说什么？&#10;&#10;一个细节、一个场景、一句话——&#10;写得越具体，歌越能打动TA ❤️"></textarea>
-      <p style="font-size:11px; color:var(--text3); margin-top:6px;">不用担心写不好——你负责讲故事，我负责写成歌</p>
-    </div>
-
-    <!-- 分隔线 -->
-    <div style="border-top:1px solid rgba(255,255,255,0.06); margin:8px 0 20px;"></div>
-
-    <!-- ③ 付款 — 配角 -->
-    <p style="font-size:13px; color:var(--text2); margin-bottom:12px;">写好故事后，扫码付款👇</p>
-
-    <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px;">
-      <img src="qr-payment.jpg" alt="微信扫码支付" style="width:100px; height:100px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); object-fit:contain; flex-shrink:0;">
-      <div style="text-align:left; font-size:12px; color:var(--text2); line-height:1.8;">
-        <div>💰 <strong style="color:var(--gold);">¥9.9</strong> / 首</div>
-        <div>📱 加微信 <strong style="color:var(--accent2);">jewel3210</strong></div>
-        <div>📸 发送付款截图 + 故事</div>
-        <div>⏱️ 12-24小时内交付</div>
+      <div style="text-align:left; margin-bottom:16px;">
+        <label style="font-size:11px; color:var(--text3); display:block; margin-bottom:4px;">场景</label>
+        <select id="scene-select" style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:10px 12px; color:#fff; font-size:14px;">
+          <option value="生日">🎂 生日祝福</option>
+          <option value="表白">💌 表白/纪念</option>
+          <option value="给孩子">👶 给孩子</option>
+          <option value="给父母">👨‍👩‍👧 给父母</option>
+          <option value="告别">🌅 告别/怀念</option>
+          <option value="自定义">✨ 其他场景</option>
+        </select>
       </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="font-size:11px; color:var(--text3); display:block; margin-bottom:4px;">✍️ 你们的故事</label>
+        <textarea id="story-input" placeholder="TA叫什么？你们怎么认识的？&#10;有没有特别难忘的回忆？&#10;你想通过这首歌对TA说什么？&#10;&#10;写得越具体，歌越能打动TA ❤️"></textarea>
+        <p style="font-size:11px; color:var(--text3); margin-top:4px;">你负责讲故事，我负责写成歌</p>
+      </div>
+
+      <button id="submit-btn" class="cta-btn" onclick="submitStory()" style="margin-bottom:16px;">✨ 提交故事</button>
+      <button class="modal-close" onclick="closeModal()">关闭</button>
     </div>
 
-    <p class="note" style="margin-top:8px;">不满意可免费修改一次</p>
+    <!-- Step 2: 付款（提交后显示） -->
+    <div id="modal-step2" style="display:none;">
+      <h3 style="margin-bottom:8px;">✅ 故事已复制到剪贴板</h3>
+      <p style="font-size:14px; color:var(--text2); margin-bottom:20px;">现在完成最后两步👇</p>
 
-    <button class="modal-close" onclick="closeModal()">关闭</button>
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px; background:rgba(212,168,83,0.08); border-radius:14px; padding:16px;">
+        <img src="qr-payment.jpg" alt="微信扫码支付" style="width:90px; height:90px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); object-fit:contain; flex-shrink:0;">
+        <div style="text-align:left; font-size:12px; color:var(--text2); line-height:1.9;">
+          <div>① <strong style="color:#fff;">扫码付款</strong> ¥9.9</div>
+          <div>② <strong style="color:#fff;">打开微信</strong></div>
+          <div style="margin-left:12px;">→ 搜索 <strong style="color:var(--accent2);">jewel3210</strong></div>
+          <div>③ <strong style="color:#fff;">粘贴发送</strong> 故事+截图</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--text3); margin-bottom:16px;">⏱️ 12-24小时内交付 · 不满意免费修改</p>
+
+      <button class="cta-btn" onclick="copyAndOpenWechat()" style="margin-bottom:12px; font-size:15px; padding:14px;">📋 再次复制 + 打开微信</button>
+      <button class="modal-close" onclick="closeModal()">关闭</button>
+    </div>
+
   </div>
 </div>
 
@@ -298,6 +305,10 @@
     var select = document.getElementById('scene-select');
     var title = document.getElementById('modal-title');
     var desc = document.getElementById('modal-desc');
+
+    // Reset to step 1
+    document.getElementById('modal-step1').style.display = 'block';
+    document.getElementById('modal-step2').style.display = 'none';
 
     if (scene) select.value = scene;
     var sceneMap = {
@@ -309,11 +320,55 @@
       '自定义': '为你定制独一无二的歌',
     };
     title.textContent = sceneMap[scene] || '开始创作专属歌';
-    desc.textContent = scene ? '讲讲你们的故事，我来写成一首歌' : '告诉我想做什么场景的歌，我来帮你创作';
+    desc.textContent = scene ? '讲讲你们的故事，我来写成一首独一无二的歌' : '告诉我想做什么场景的歌，我来帮你创作';
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
+  }
+
+  function submitStory() {
+    var story = document.getElementById('story-input').value.trim();
+    if (!story) {
+      document.getElementById('story-input').style.borderColor = '#e94560';
+      document.getElementById('story-input').focus();
+      setTimeout(function() {
+        document.getElementById('story-input').style.borderColor = '';
+      }, 1500);
+      return;
+    }
+
+    var scene = document.getElementById('scene-select');
+    var sceneText = scene.options[scene.selectedIndex].text;
+    var fullText = '【' + sceneText + '】\n' + story;
+
+    // Copy to clipboard
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(fullText).catch(function(){});
+    } else {
+      // Fallback for older browsers / WeChat
+      var textarea = document.getElementById('story-input');
+      textarea.value = fullText;
+      textarea.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      textarea.value = story; // restore
+    }
+
+    // Switch to step 2
+    document.getElementById('modal-step1').style.display = 'none';
+    document.getElementById('modal-step2').style.display = 'block';
+  }
+
+  function copyAndOpenWechat() {
+    var story = document.getElementById('story-input').value.trim();
+    var scene = document.getElementById('scene-select');
+    var sceneText = scene.options[scene.selectedIndex].text;
+    var fullText = '【' + sceneText + '】\n' + story;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(fullText).catch(function(){});
+    }
+    // Try to open WeChat (works on mobile)
+    window.location.href = 'weixin://';
   }
 
   function closeModal() {
